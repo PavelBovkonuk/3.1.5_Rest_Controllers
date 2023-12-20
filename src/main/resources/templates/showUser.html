@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Информация о пользователе</title>
+</head>
+<body>
+<h1>Информация о пользователе</h1>
+<form th:object="${user}" th:action="@{/user/user}" method="get">
+  <label>Имя: <input type="text" th:field="*{username}" /></label>
+
+  <label>Возраст: <input type="number" th:field="*{age}" /></label>
+
+
+</form>
+<a href="/logout">Logout</a>
+</body>
+</html>
