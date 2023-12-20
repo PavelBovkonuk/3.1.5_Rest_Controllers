@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Страница админа</title>
+</head>
+<body>
+<h1>Информация об админе</h1>
+<form th:object="${admin}" th:action="@{/admin/}" method="get">
+    <input type="hidden" th:field="*{id}" />
+    <label>Имя: <input type="text" th:field="*{username}" /></label>
+
+    <label>Возраст: <input type="number" th:field="*{age}" /></label>
+
+</form>
+<a href="/admin/show">Страница пользователей</a>
+<a href="/logout">Logout</a>
+</body>
+</html>
