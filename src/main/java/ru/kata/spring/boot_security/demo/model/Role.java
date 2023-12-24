@@ -1,4 +1,4 @@
-package ru.kata.spring.boot_security.demo.models;
+package ru.kata.spring.boot_security.demo.model;
 
 import org.springframework.security.core.GrantedAuthority;
 
@@ -27,7 +27,8 @@ public class Role implements GrantedAuthority {
 
     @Override
     public String toString() {
-        return name;
+        String role = name.replace("ROLE_", "");
+        return role;
     }
 
     @Override
@@ -58,4 +59,6 @@ public class Role implements GrantedAuthority {
     public void setUsers(Collection<User> users) {
         this.users = users;
     }
+
+
 }

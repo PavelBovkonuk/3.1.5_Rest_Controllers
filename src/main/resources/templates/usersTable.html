@@ -12,6 +12,7 @@
     <th>ID</th>
     <th>Имя</th>
     <th>Возраст</th>
+    <th>Роль</th>
     <th>Действия</th>
   </tr>
   </thead>
@@ -20,6 +21,13 @@
     <td th:text="${user.id}"></td>
     <td th:text="${user.username}"></td>
     <td th:text="${user.age}"></td>
+    <td>
+    <span th:each="role : ${user.roles}"
+      th:switch="${role.name}">
+        <span th:case="'ROLE_ADMIN'">ADMIN</span>
+        <span th:case="'ROLE_USER'">USER</span>
+        </span>
+      </td>
     <td>
       <form th:action="@{/admin/delete}" method="post">
         <input type="hidden" name="id" th:value="${user.id}">

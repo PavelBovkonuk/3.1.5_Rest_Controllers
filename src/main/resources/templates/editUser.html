@@ -10,9 +10,17 @@
     <input type="hidden" th:field="*{id}" />
     <label>Имя: <input type="text" th:field="*{username}" /></label><br/>
     <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span><br/>
+    <span th:if="${errorMessage}" style="color: red;" th:text="${errorMessage}"></span><br/>
 
     <label>Возраст: <input type="number" th:field="*{age}" /></label><br/>
     <span th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></span><br/>
+
+    <label>Пароль: <input type="text" th:field="*{password}" /></label><br/>
+
+    <label for="roles">Выберите роль:</label>
+    <select id="roles" name="roles" multiple>
+        <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}"></option>
+    </select>
 
     <input type="submit" value="Сохранить"/>
 </form>
