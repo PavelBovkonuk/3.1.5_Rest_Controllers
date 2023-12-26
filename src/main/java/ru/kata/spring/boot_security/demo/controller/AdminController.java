@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.service.UserService;
@@ -30,14 +31,17 @@ public class AdminController {
 
     @GetMapping("/")
     public String user(Principal principal, Model model) {
-        model.addAttribute("admin", userService.findByUsername(principal.getName()));
-        return "showAdmin";
+        model.addAttribute("user", userService.findByUsername(principal.getName()));
+        return "showUser";
     }
 
     @GetMapping("/show")
-    public String show(Model model) {
+    public String show(Principal principal, Model model) {
         List<User> users = userService.getAllUsers();
+        List<Role> roles = roleRepository.findAll();
+        model.addAttribute("user", userService.findByUsername(principal.getName()));
         model.addAttribute("users", users);
+        model.addAttribute("roles", roles);
         return "usersTable";
     }
 

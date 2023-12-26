@@ -1,18 +1,91 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="UTF-8">
-  <title>Информация о пользователе</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous">
+  <title>User page</title>
+    <style>
+        .about-user {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+    </style>
 </head>
 <body>
-<h1>Информация о пользователе</h1>
-<form th:object="${user}" th:action="@{/user/user}" method="get">
-  <label>Имя: <input type="text" th:field="*{username}" /></label>
+<header>
+  <nav class="navbar navbar-dark bg-dark navbar-fixed-top">
+    <div class="container-fluid text-white">
+            <span class="navbar-header">
+                <span th:text="${user.username}"></span>
+                <span> with roles: </span>
+                <span th:each="role : ${roles}"
+                      th:text="${role.getAuthority().replace('ROLE_', '') + ' '}">
+                </span>
+            </span>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/logout">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
+<hr>
+<div class="d-flex">
+  <div class="col-3">
+    <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+      <a class="nav-link" href="/admin/show" sec:authorize="hasAuthority('ROLE_ADMIN')" role="tab"
+         aria-controls="v-pills-admin" aria-selected="true">Admin</a>
+      <a class="nav-link active" href="/user" sec:authorize="hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')"
+         role="tab" aria-controls="v-pills-user" aria-selected="true">User</a>
+    </div>
+  </div>
+  <div class="col-9">
+    <h2>User information page</h2>
+  <div class="about-user">
+    <h5 class="mb-2">About user</h5>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Name</th>
+                <th scope="col">Age</th>
+                <th scope="col">Role</th>
+                </tr>
+            </thead>
+          <tbody>
+          <tr>
+            <td th:text="${user.id}">Id</td>
+            <td th:text="${user.username}">Name</td>
+            <td th:text="${user.age}">Age</td>
+            <td>
+                        <span th:each="role : ${roles}"
+                              th:switch="${role.getAuthority()}">
+                            <span th:case="'ROLE_ADMIN'">ADMIN</span>
+                            <span th:case="'ROLE_USER'">USER</span>
+                        </span>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+  </div>
+  </div>
+</div>
 
-  <label>Возраст: <input type="number" th:field="*{age}" /></label>
-
-
-</form>
-<a href="/logout">Logout</a>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 </body>
 </html>
