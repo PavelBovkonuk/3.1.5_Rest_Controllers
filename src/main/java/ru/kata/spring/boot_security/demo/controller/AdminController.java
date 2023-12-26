@@ -32,6 +32,7 @@ public class AdminController {
     @GetMapping("/")
     public String user(Principal principal, Model model) {
         model.addAttribute("user", userService.findByUsername(principal.getName()));
+        model.addAttribute("roles", userService.findByUsername(principal.getName()).getAuthorities());
         return "showUser";
     }
 
@@ -55,7 +56,7 @@ public class AdminController {
     }
 
     @PostMapping("/save")
-    public String saveUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model) {
+    public String saveUser(@ModelAttribute("user") User user, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "editUser";
         }
