@@ -55,4 +55,20 @@ public class UserServiceImpl implements UserService {
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
+    @Transactional
+    @Override
+    public void updateUser(User user) {
+        User existingUser = userRepository.findById(user.getId()).orElse(null);
+        if (existingUser != null) {
+            if (!user.getPassword().equals(existingUser.getPassword())) {
+                String encodedPassword = passwordEncoder.encode(user.getPassword());
+                existingUser.setPassword(encodedPassword);
+            }
+            existingUser.setUsername(user.getUsername());
+            existingUser.setAge(user.getAge());
+            existingUser.setRoles(user.getRoles());
+            userRepository.save(existingUser);
+        }
+    }
 }
