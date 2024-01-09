@@ -29,12 +29,18 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void saveUser(User user) {
-        if (userRepository.findByUsername(user.getUsername()) != null && userRepository.findByUsername(user.getUsername()).getId() != user.getId()) {
-            throw new RuntimeException("Имя уже используется!");
-        }
+    public User addUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
+        return userRepository.save(user);
+    }
+    @Transactional
+    @Override
+    public User saveUser(User user, Long id) {
+        User currentUser = userRepository.findById(id).get();
+        if (!user.getPassword().equals(currentUser.getPassword())) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+        return userRepository.save(user);
     }
 
     @Transactional(readOnly = true)
@@ -52,23 +58,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(readOnly = true)
     @Override
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
-
-    @Transactional
-    @Override
-    public void updateUser(User user) {
-        User existingUser = userRepository.findById(user.getId()).orElse(null);
-        if (existingUser != null) {
-            if (!user.getPassword().equals(existingUser.getPassword())) {
-                String encodedPassword = passwordEncoder.encode(user.getPassword());
-                existingUser.setPassword(encodedPassword);
-            }
-            existingUser.setUsername(user.getUsername());
-            existingUser.setAge(user.getAge());
-            existingUser.setRoles(user.getRoles());
-            userRepository.save(existingUser);
-        }
+    public User findByUsername(String name) {
+        return userRepository.findByUsername(name);
     }
 }

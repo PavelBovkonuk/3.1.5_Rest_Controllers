@@ -29,7 +29,7 @@ public class User implements UserDetails {
     private Long id;
     @Column(name = "username", unique = true)
     @NotBlank(message = "Имя не может быть пустым")
-    private String username;
+    private String name;
     @Column(name = "age")
     @NotNull(message = "Возраст не может быть пустым")
     @Min(value = 0, message = "Возраст должен быть положительным числом")
@@ -38,7 +38,7 @@ public class User implements UserDetails {
     private String password;
 
     @ManyToMany(cascade = CascadeType.MERGE)
-    @JoinTable(name = "user_roles",
+    @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> roles;
@@ -46,8 +46,8 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String username, String password, Collection<Role> roles) {
-        this.username = username;
+    public User(String name, String password, Collection<Role> roles) {
+        this.name = name;
         this.password = password;
         this.roles = roles;
     }
@@ -68,8 +68,8 @@ public class User implements UserDetails {
         this.id = id;
     }
 
-    public void setUsername(String name) {
-        this.username = name;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setPassword(String password) {
@@ -94,8 +94,13 @@ public class User implements UserDetails {
         return password;
     }
 
+    @Override
     public String getUsername() {
-        return username;
+        return this.name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override
@@ -122,7 +127,7 @@ public class User implements UserDetails {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", name='" + username + '\'' +
+                ", name='" + name + '\'' +
                 ", age=" + age +
                 '}';
     }
